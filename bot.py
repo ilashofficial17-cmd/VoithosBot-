@@ -228,7 +228,6 @@ async def handle_menu(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int
     text = update.message.text
     logger.info(f"📨 Сообщение: '{text}' от {update.effective_user.first_name}")
 
-    try:
     if text == "🚀 Заказать бота":
         msg = (
             "📩 *Заказать бота*\n\n"
@@ -301,11 +300,7 @@ async def handle_menu(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int
         logger.info(f"👋 Выход {update.effective_user.first_name}")
         return -1
 
-        logger.info(f"✅ Обработан: {text}")
-    except Exception as e:
-        logger.error(f"❌ Ошибка при обработке '{text}': {e}", exc_info=True)
-        await update.message.reply_text("Ошибка! Используйте меню.", reply_markup=main_menu_keyboard())
-
+    logger.info(f"✅ Обработан: {text}")
     return -1
 
 
@@ -315,6 +310,7 @@ async def handle_menu(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int
 async def consulting_mode(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     """Обработчик ИИ-консультанта в режиме демонстрации."""
     user_message = update.message.text
+    logger.info(f"🤖 Режим консультации: '{user_message}' от {update.effective_user.first_name}")
 
     # Проверка на команду выхода
     if user_message == "/menu":
