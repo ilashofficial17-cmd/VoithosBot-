@@ -148,8 +148,33 @@ async def handle_buttons(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
             "➕ Поддержка и обновления — €120/мес"
         )
 
+        # Третья часть сообщения (ТАРГЕТИРОВАННАЯ РЕКЛАМА)
+        msg3 = (
+            "\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+            "🎯 *3. ТАРГЕТИРОВАННАЯ РЕКЛАМА*\n"
+            "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
+            "Реклама которая приводит реальных клиентов\n\n"
+            "*Основное (€500/мес):*\n"
+            "_не включая рекламный бюджет_\n\n"
+            "• Настройка рекламного кабинета\n"
+            "• 1 платформа (Meta / Google)\n"
+            "• До 3 креативов в месяц\n"
+            "• Аудитории и таргетинг\n"
+            "• Еженедельный отчёт\n"
+            "• Оптимизация кампаний\n\n"
+            "*Дополнительные опции:*\n"
+            "➕ +1 платформа — €200/мес\n"
+            "➕ +3 креатива — €150\n"
+            "➕ AI-генерация креативов — €200/мес\n"
+            "➕ A/B тестирование — €150/мес\n"
+            "➕ Ретаргетинг — €200/мес\n"
+            "➕ Landing page под кампанию — €600 разово\n"
+            "➕ Управление бюджетом — 10–15% от бюджета"
+        )
+
         await update.message.reply_text(msg, parse_mode="Markdown")
-        await update.message.reply_text(msg2, parse_mode="Markdown", reply_markup=back_menu())
+        await update.message.reply_text(msg2, parse_mode="Markdown")
+        await update.message.reply_text(msg3, parse_mode="Markdown", reply_markup=back_menu())
 
     # 🤖 ДЕМОНСТРАЦИЯ
     elif text == "🤖 Демонстрация":
