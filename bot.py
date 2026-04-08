@@ -198,12 +198,14 @@ async def get_ai_response(user_message: str) -> str:
 #  Команда /start
 # ─────────────────────────────────────────
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    logger.info(f"👤 /start от {update.effective_user.first_name}")
     context.user_data["mode"] = "menu"
     await update.message.reply_text(
         WELCOME_TEXT,
         parse_mode="Markdown",
         reply_markup=main_menu_keyboard(),
     )
+    logger.info("✅ /start обработан")
 
 
 # ─────────────────────────────────────────
@@ -224,8 +226,9 @@ async def menu_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
 async def handle_menu(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     """Обработчик выбора из главного меню."""
     text = update.message.text
+    logger.info(f"📨 Сообщение: '{text}' от {update.effective_user.first_name}")
 
-    # Заказать бота
+    try:
     if text == "🚀 Заказать бота":
         msg = (
             "📩 *Заказать бота*\n\n"
@@ -295,7 +298,13 @@ async def handle_menu(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int
     # Выход
     elif text == "❌ Выход":
         await update.message.reply_text("До встречи! 👋", reply_markup=ReplyKeyboardRemove())
+        logger.info(f"👋 Выход {update.effective_user.first_name}")
         return -1
+
+        logger.info(f"✅ Обработан: {text}")
+    except Exception as e:
+        logger.error(f"❌ Ошибка при обработке '{text}': {e}", exc_info=True)
+        await update.message.reply_text("Ошибка! Используйте меню.", reply_markup=main_menu_keyboard())
 
     return -1
 
