@@ -8,6 +8,7 @@ from telegram.ext import (
     ContextTypes,
     MessageHandler,
     filters,
+    ConversationHandler,
 )
 
 load_dotenv()
@@ -23,6 +24,10 @@ logging.basicConfig(
     level=logging.INFO,
 )
 logger = logging.getLogger(__name__)
+
+# Состояния для ConversationHandler
+WAITING_NAME = 1
+WAITING_CONTACT = 2
 
 
 # ─────────────────────────────────────────
@@ -89,9 +94,10 @@ async def handle_buttons(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
     elif text == "🛍️ Заказать услуги":
         await update.message.reply_text(
             "🛍️ ЗАКАЗАТЬ УСЛУГИ\n\n"
-            "(Контент будет здесь)",
-            reply_markup=back_menu(),
+            "Оставьте заявку и наш консультант свяжется с вами.\n\n"
+            "Как вас зовут?",
         )
+        return WAITING_NAME
 
     # 📋 ВИДЫ УСЛУГ
     elif text == "📋 Виды услуг":
@@ -126,6 +132,45 @@ async def handle_buttons(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
 
 
 # ─────────────────────────────────────────
+#  ФОРМА ЗАКАЗА - СБОР ИМЕНИ
+# ─────────────────────────────────────────
+async def get_name(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+    """Сбор имени клиента."""
+    name = update.message.text
+    context.user_data["name"] = name
+    logger.info(f"📝 Имя: {name}")
+
+    await update.message.reply_text(
+        f"Спасибо, {name}!\n\n"
+        "Теперь поделитесь контактом:\n\n"
+        "• Телефон (например: +380501234567)\n"
+        "• Или Telegram: @username"
+    )
+    return WAITING_CONTACT
+
+
+# ─────────────────────────────────────────
+#  ФОРМА ЗАКАЗА - СБОР КОНТАКТА
+# ─────────────────────────────────────────
+async def get_contact(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+    """Сбор контакта и сохранение заявки."""
+    contact = update.message.text
+    name = context.user_data.get("name", "Unknown")
+
+    logger.info(f"📞 Заявка: {name} | {contact}")
+
+    await update.message.reply_text(
+        f"✅ Спасибо!\n\n"
+        f"Ваша заявка принята:\n"
+        f"• Имя: {name}\n"
+        f"• Контакт: {contact}\n\n"
+        f"Наш консультант свяжется с вами в течение 24 часов.",
+        reply_markup=main_menu(),
+    )
+    return -1
+
+
+# ─────────────────────────────────────────
 #  ЗАПУСК
 # ─────────────────────────────────────────
 def main() -> None:
@@ -134,10 +179,23 @@ def main() -> None:
 
     app = Application.builder().token(TOKEN).build()
 
+    # ConversationHandler для формы заказа
+    order_handler = ConversationHandler(
+        entry_points=[MessageHandler(filters.TEXT, handle_buttons)],
+        states={
+            WAITING_NAME: [MessageHandler(filters.TEXT, get_name)],
+            WAITING_CONTACT: [MessageHandler(filters.TEXT, get_contact)],
+        },
+        fallbacks=[
+            CommandHandler("menu", menu_command),
+            MessageHandler(filters.Regex("^⬅️ Назад в меню$"), menu_command),
+        ],
+    )
+
     # Обработчики
     app.add_handler(CommandHandler("start", start))
     app.add_handler(CommandHandler("menu", menu_command))
-    app.add_handler(MessageHandler(filters.TEXT, handle_buttons))
+    app.add_handler(order_handler)
 
     logger.info("✅ Бот готов!")
     logger.info("=" * 50)
