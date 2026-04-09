@@ -145,6 +145,13 @@ TEXTS = {
             "сделать и для вашего бизнеса."
         ),
         "demo_error": "⚠️ Не удалось получить ответ. Попробуйте ещё раз.",
+        "demo_first_msg": "Привет! Расскажи, чем занимаешься? Может подскажу что-нибудь полезное 😊",
+        "demo_limit": (
+            "⏳ Демо закончилось — 20 сообщений использовано.\n\n"
+            "Понравилось? Напиши @Foxsiiiii — обсудим\n"
+            "как сделать такого же бота для твоего бизнеса."
+        ),
+        "btn_order_service": "🛍️ Заказать",
     },
     "en": {
         "welcome": (
@@ -292,6 +299,13 @@ TEXTS = {
             "for your business."
         ),
         "demo_error": "⚠️ Couldn't get a response. Please try again.",
+        "demo_first_msg": "Hey! Tell me about your business — maybe I can suggest something useful 😊",
+        "demo_limit": (
+            "⏳ Demo is over — 20 messages used.\n\n"
+            "Liked it? Message @Foxsiiiii — let's discuss\n"
+            "how to build the same bot for your business."
+        ),
+        "btn_order_service": "🛍️ Order",
     },
     "de": {
         "welcome": (
@@ -439,6 +453,13 @@ TEXTS = {
             "können wir auch für dein Business bauen."
         ),
         "demo_error": "⚠️ Antwort konnte nicht abgerufen werden. Bitte versuche es erneut.",
+        "demo_first_msg": "Hey! Erzähl mir von deinem Business — vielleicht kann ich dir was Nützliches vorschlagen 😊",
+        "demo_limit": (
+            "⏳ Demo ist vorbei — 20 Nachrichten verbraucht.\n\n"
+            "Hat es dir gefallen? Schreib @Foxsiiiii — lass uns\n"
+            "besprechen, wie wir so einen Bot für dich bauen."
+        ),
+        "btn_order_service": "🛍️ Bestellen",
     },
 }
 
