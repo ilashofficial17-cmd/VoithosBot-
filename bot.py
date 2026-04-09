@@ -96,11 +96,9 @@ def back_menu(context) -> ReplyKeyboardMarkup:
 def lang_keyboard() -> InlineKeyboardMarkup:
     """Кнопки выбора языка."""
     return InlineKeyboardMarkup([
-        [
-            InlineKeyboardButton("💬 Русский", callback_data="lang_ru"),
-            InlineKeyboardButton("🇬🇧 English", callback_data="lang_en"),
-            InlineKeyboardButton("🇩🇪 Deutsch", callback_data="lang_de"),
-        ],
+        [InlineKeyboardButton("Русский", callback_data="lang_ru")],
+        [InlineKeyboardButton("English", callback_data="lang_en")],
+        [InlineKeyboardButton("Deutsch", callback_data="lang_de")],
     ])
 
 
