@@ -93,12 +93,17 @@ async def handle_buttons(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
 
     # 🛍️ ЗАКАЗАТЬ УСЛУГИ
     elif text == "🛍️ Заказать услуги":
+        keyboard = InlineKeyboardMarkup([
+            [InlineKeyboardButton("📩 Связаться", url="https://t.me/Foxsiiiii")],
+            [InlineKeyboardButton("📝 Заполнить форму", callback_data="order_form")],
+        ])
+
         await update.message.reply_text(
-            "🛍️ ЗАКАЗАТЬ УСЛУГИ\n\n"
-            "Оставьте заявку и наш консультант свяжется с вами.\n\n"
-            "Как вас зовут?",
+            "🛍️ *ЗАКАЗАТЬ УСЛУГИ*\n\n"
+            "Выберите удобный способ 👇",
+            parse_mode="MarkdownV2",
+            reply_markup=keyboard,
         )
-        return WAITING_NAME
 
     # 📋 ВИДЫ УСЛУГ
     elif text == "📋 Виды услуг":
@@ -240,6 +245,17 @@ async def handle_service_callback(update: Update, context: ContextTypes.DEFAULT_
             SERVICES[data],
             parse_mode="MarkdownV2",
             reply_markup=back_kb,
+        )
+
+    elif data == "order_form":
+        await query.message.edit_text(
+            "📝 *ФОРМА ЗАЯВКИ*\n\n"
+            "Скоро здесь будет ссылка на форму\.\n"
+            "Пока можете написать нам напрямую 👇",
+            parse_mode="MarkdownV2",
+            reply_markup=InlineKeyboardMarkup([
+                [InlineKeyboardButton("📩 Связаться", url="https://t.me/Foxsiiiii")],
+            ]),
         )
 
     elif data == "back_to_services":
