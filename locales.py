@@ -147,7 +147,151 @@ TEXTS = {
         "demo_error": "⚠️ Не удалось получить ответ. Попробуйте ещё раз.",
     },
     "en": {
-        # TODO: English translations
+        "welcome": (
+            "👋 Welcome to Aicore!\n\n"
+            "Choose what interests you:"
+        ),
+        "choose_option": "Choose an option:",
+        "btn_order": "🛍️ Order services",
+        "btn_services": "📋 Our services",
+        "btn_demo": "🤖 Demo",
+        "btn_useful": "💡 Why us",
+        "btn_back": "⬅️ Back to menu",
+        "btn_end_demo": "❌ End demo",
+        "use_buttons": "Use the menu buttons 👇",
+        "order_title": "🛍️ *ORDER SERVICES*\n\nChoose a convenient way 👇",
+        "btn_contact": "📩 Contact us",
+        "btn_form": "📝 Fill out a form",
+        "order_form": (
+            "📝 *APPLICATION FORM*\n\n"
+            "A link to the form will appear here soon\\.\n"
+            "For now, feel free to message us directly 👇"
+        ),
+        "services_intro": (
+            "📋 *OUR SERVICES*\n\n"
+            "We help businesses grow with technology\\.\n"
+            "Every solution is tailored to your goals\\.\n\n"
+            "Choose a service to learn more 👇"
+        ),
+        "btn_aibot": "🤖 AI Bot",
+        "btn_auto": "⚙️ Automation",
+        "btn_ads": "🎯 Targeted advertising",
+        "btn_back_services": "⬅️ Back to services",
+        "service_aibot": (
+            "🤖 *AI BOT*\n\n"
+            "A smart assistant that works for you 24/7\n\n"
+            "━━━━━━━━━━━━━━━━━━━━━\n"
+            "📦 *What's included:*\n"
+            "━━━━━━━━━━━━━━━━━━━━━\n\n"
+            "▸ Bot on any platform of your choice:\n"
+            "  Telegram, Instagram, Facebook or website\n"
+            "▸ AI consultant trained for\n"
+            "  your business and brand\n"
+            "▸ Automatic contact collection\n"
+            "  via Google Sheets or other tools\n"
+            "▸ Any language support\n\n"
+            "━━━━━━━━━━━━━━━━━━━━━\n"
+            "✨ *Can be added:*\n"
+            "━━━━━━━━━━━━━━━━━━━━━\n\n"
+            "➕ Online booking and scheduling\n"
+            "➕ Automatic client reminders\n"
+            "➕ Image generation inside the bot\n"
+            "➕ Reaction to comments and stories\n"
+            "➕ CRM integration\n"
+            "➕ Sales funnel\n"
+            "➕ Post\\-launch support and updates"
+        ),
+        "service_auto": (
+            "⚙️ *AUTOMATION*\n\n"
+            "We remove the routine — your business runs itself\n\n"
+            "━━━━━━━━━━━━━━━━━━━━━\n"
+            "📦 *What's included:*\n"
+            "━━━━━━━━━━━━━━━━━━━━━\n\n"
+            "▸ Audit of your processes: we find\n"
+            "  where time and money are lost\n"
+            "▸ Automation of one key process\n"
+            "  _For example: request → notification →_\n"
+            "  _spreadsheet → client response_\n\n"
+            "━━━━━━━━━━━━━━━━━━━━━\n"
+            "✨ *Can be added:*\n"
+            "━━━━━━━━━━━━━━━━━━━━━\n\n"
+            "➕ Automation of additional processes\n"
+            "➕ Integration between platforms and services\n"
+            "➕ Auto\\-reports and analytics\n"
+            "➕ Automatic invoicing\n"
+            "➕ CRM integration\n"
+            "➕ Post\\-launch support and updates"
+        ),
+        "service_ads": (
+            "🎯 *TARGETED ADVERTISING*\n\n"
+            "Ads that bring real clients\n"
+            "_Ad budget is paid separately_\n\n"
+            "━━━━━━━━━━━━━━━━━━━━━\n"
+            "📦 *What's included:*\n"
+            "━━━━━━━━━━━━━━━━━━━━━\n\n"
+            "▸ Ad account setup from scratch\n"
+            "▸ Ad management on one or more\n"
+            "  platforms: Meta, Google and TikTok\n"
+            "▸ Creatives — banners and ad copy\n"
+            "▸ Audience and targeting setup\n"
+            "▸ Continuous campaign optimization\n\n"
+            "━━━━━━━━━━━━━━━━━━━━━\n"
+            "✨ *Can be added:*\n"
+            "━━━━━━━━━━━━━━━━━━━━━\n\n"
+            "➕ AI\\-generated ad materials\n"
+            "➕ A/B testing of ads\n"
+            "➕ Retargeting — bringing back those\n"
+            "  who already showed interest\n"
+            "➕ Landing page for the ad campaign\n"
+            "➕ Ad budget management"
+        ),
+        "useful": (
+            "💡 *WHY US*\n\n"
+            "Sound familiar?\n\n"
+            "━━━━━━━━━━━━━━━━━━━━━\n\n"
+            "😩 *A client messaged at night — you're asleep*\n"
+            "While you rest, your competitor already replied\\.\n"
+            "▸ Our AI bot responds in *2 seconds*\n"
+            "  — day and night, no days off\n\n"
+            "😩 *Hours wasted on routine*\n"
+            "Leads, spreadsheets, reminders, invoices\\.\\.\\.\n"
+            "▸ Automation saves *15\\+ hours*\n"
+            "  *per week* — you focus on business,\n"
+            "  not copy\\-pasting\n\n"
+            "😩 *Ads running — zero clients*\n"
+            "Budget draining, no leads\\.\n"
+            "▸ We set up targeting so that\n"
+            "  every euro brings *real clients*\n\n"
+            "━━━━━━━━━━━━━━━━━━━━━\n\n"
+            "📊 *Some numbers:*\n\n"
+            "▸ *70%* of clients leave if they don't get\n"
+            "  a response within 5 minutes\n"
+            "▸ Businesses with automation grow\n"
+            "  *2x faster* than competitors\n"
+            "▸ An AI bot replaces *3\\-5 managers*\n"
+            "  and doesn't ask for a salary\n\n"
+            "━━━━━━━━━━━━━━━━━━━━━\n\n"
+            "🚀 *We make your business work*\n"
+            "*faster, smarter, and with fewer hands\\.*"
+        ),
+        "demo_intro": (
+            "🤖 *AI CONSULTANT DEMO*\n\n"
+            "You're now chatting with Aicore's AI assistant\\.\n"
+            "It knows everything about our services and will help\n"
+            "find the right solution for your business\\.\n\n"
+            "Ask anything, for example:\n"
+            "▸ _\"I need a bot for Instagram\"_\n"
+            "▸ _\"How to automate requests?\"_\n"
+            "▸ _\"What kind of ads would work for me?\"_\n\n"
+            "Type your question 👇"
+        ),
+        "demo_unavailable": "⚠️ AI consultant is temporarily unavailable.",
+        "demo_end": (
+            "👋 Demo finished!\n\n"
+            "Liked it? We can build the same AI consultant\n"
+            "for your business."
+        ),
+        "demo_error": "⚠️ Couldn't get a response. Please try again.",
     },
     "de": {
         # TODO: German translations
