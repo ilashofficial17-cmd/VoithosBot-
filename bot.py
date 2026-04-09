@@ -13,6 +13,8 @@ from telegram.ext import (
     ConversationHandler,
 )
 
+from locales import detect_lang, t, TEXTS
+
 load_dotenv()
 
 TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
@@ -76,32 +78,50 @@ DEMO_CHAT = 1
 # ─────────────────────────────────────────
 #  ГЛАВНОЕ МЕНЮ
 # ─────────────────────────────────────────
-def main_menu() -> ReplyKeyboardMarkup:
+def main_menu(context) -> ReplyKeyboardMarkup:
     """Главное меню с 4 кнопками."""
     keyboard = [
-        ["🛍️ Заказать услуги", "📋 Виды услуг"],
-        ["🤖 Демонстрация", "💡 Чем мы полезны"],
+        [t(context, "btn_order"), t(context, "btn_services")],
+        [t(context, "btn_demo"), t(context, "btn_useful")],
     ]
     return ReplyKeyboardMarkup(keyboard, resize_keyboard=True)
 
 
-def back_menu() -> ReplyKeyboardMarkup:
+def back_menu(context) -> ReplyKeyboardMarkup:
     """Кнопка назад в меню."""
-    keyboard = [["⬅️ Назад в меню"]]
+    keyboard = [[t(context, "btn_back")]]
     return ReplyKeyboardMarkup(keyboard, resize_keyboard=True)
+
+
+def lang_keyboard() -> InlineKeyboardMarkup:
+    """Кнопки выбора языка."""
+    return InlineKeyboardMarkup([
+        [
+            InlineKeyboardButton("🇷🇺 Русский", callback_data="lang_ru"),
+            InlineKeyboardButton("🇬🇧 English", callback_data="lang_en"),
+            InlineKeyboardButton("🇩🇪 Deutsch", callback_data="lang_de"),
+        ],
+    ])
 
 
 # ─────────────────────────────────────────
 #  /START
 # ─────────────────────────────────────────
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    """Приветствие и главное меню."""
+    """Приветствие с автодетектом языка и выбором."""
     logger.info(f"👤 /start от {update.effective_user.first_name}")
 
+    # Автодетект языка из Telegram
+    lang = detect_lang(update.effective_user)
+    context.user_data["lang"] = lang
+
     await update.message.reply_text(
-        "👋 Добро пожаловать в Aicore!\n\n"
-        "Выберите что вас интересует:",
-        reply_markup=main_menu(),
+        t(context, "welcome"),
+        reply_markup=main_menu(context),
+    )
+    await update.message.reply_text(
+        "🌐 Change language / Сменить язык:",
+        reply_markup=lang_keyboard(),
     )
 
 
@@ -112,9 +132,12 @@ async def menu_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
     """Вернуться в главное меню."""
     logger.info(f"📋 /menu от {update.effective_user.first_name}")
 
+    if "lang" not in context.user_data:
+        context.user_data["lang"] = detect_lang(update.effective_user)
+
     await update.message.reply_text(
-        "Выберите опцию:",
-        reply_markup=main_menu(),
+        t(context, "choose_option"),
+        reply_markup=main_menu(context),
     )
 
 
@@ -124,238 +147,141 @@ async def menu_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
 async def handle_buttons(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Обработка всех кнопок меню."""
     text = update.message.text
+
+    if "lang" not in context.user_data:
+        context.user_data["lang"] = detect_lang(update.effective_user)
+
     logger.info(f"📨 {text} от {update.effective_user.first_name}")
 
     # НАЗАД В МЕНЮ
-    if text == "⬅️ Назад в меню":
+    if text == t(context, "btn_back"):
         await update.message.reply_text(
-            "Выберите опцию:",
-            reply_markup=main_menu(),
+            t(context, "choose_option"),
+            reply_markup=main_menu(context),
         )
 
     # 🛍️ ЗАКАЗАТЬ УСЛУГИ
-    elif text == "🛍️ Заказать услуги":
+    elif text == t(context, "btn_order"):
         keyboard = InlineKeyboardMarkup([
-            [InlineKeyboardButton("📩 Связаться", url="https://t.me/Foxsiiiii")],
-            [InlineKeyboardButton("📝 Заполнить форму", callback_data="order_form")],
+            [InlineKeyboardButton(t(context, "btn_contact"), url="https://t.me/Foxsiiiii")],
+            [InlineKeyboardButton(t(context, "btn_form"), callback_data="order_form")],
         ])
-
         await update.message.reply_text(
-            "🛍️ *ЗАКАЗАТЬ УСЛУГИ*\n\n"
-            "Выберите удобный способ 👇",
+            t(context, "order_title"),
             parse_mode="MarkdownV2",
             reply_markup=keyboard,
         )
 
     # 📋 ВИДЫ УСЛУГ
-    elif text == "📋 Виды услуг":
+    elif text == t(context, "btn_services"):
         keyboard = InlineKeyboardMarkup([
-            [InlineKeyboardButton("🤖 AI-Бот", callback_data="service_aibot")],
-            [InlineKeyboardButton("⚙️ Автоматизация", callback_data="service_auto")],
-            [InlineKeyboardButton("🎯 Таргетированная реклама", callback_data="service_ads")],
+            [InlineKeyboardButton(t(context, "btn_aibot"), callback_data="service_aibot")],
+            [InlineKeyboardButton(t(context, "btn_auto"), callback_data="service_auto")],
+            [InlineKeyboardButton(t(context, "btn_ads"), callback_data="service_ads")],
         ])
-
         await update.message.reply_text(
-            "📋 *НАШИ УСЛУГИ*\n\n"
-            "Мы помогаем бизнесу расти с помощью технологий\.\n"
-            "Каждое решение — под ваши задачи и цели\.\n\n"
-            "Выберите услугу, чтобы узнать подробнее 👇",
+            t(context, "services_intro"),
             parse_mode="MarkdownV2",
             reply_markup=keyboard,
         )
 
     # 🤖 ДЕМОНСТРАЦИЯ
-    elif text == "🤖 Демонстрация":
+    elif text == t(context, "btn_demo"):
         if not OPENROUTER_API_KEY:
             await update.message.reply_text(
-                "⚠️ AI-консультант временно недоступен.",
-                reply_markup=main_menu(),
+                t(context, "demo_unavailable"),
+                reply_markup=main_menu(context),
             )
             return None
 
         context.user_data["demo_history"] = []
-
         demo_kb = ReplyKeyboardMarkup(
-            [["❌ Завершить демо"]],
+            [[t(context, "btn_end_demo")]],
             resize_keyboard=True,
         )
         await update.message.reply_text(
-            "🤖 *ДЕМО AI\-КОНСУЛЬТАНТА*\n\n"
-            "Сейчас вы общаетесь с AI\-помощником Aicore\.\n"
-            "Он знает всё о наших услугах и поможет\n"
-            "подобрать решение под ваш бизнес\.\n\n"
-            "Спросите что угодно, например:\n"
-            "▸ _«Мне нужен бот для Instagram»_\n"
-            "▸ _«Как автоматизировать заявки?»_\n"
-            "▸ _«Какая реклама мне подойдёт?»_\n\n"
-            "Напишите ваш вопрос 👇",
+            t(context, "demo_intro"),
             parse_mode="MarkdownV2",
             reply_markup=demo_kb,
         )
         return DEMO_CHAT
 
     # 💡 ЧЕМ МЫ ПОЛЕЗНЫ
-    elif text == "💡 Чем мы полезны":
+    elif text == t(context, "btn_useful"):
         await update.message.reply_text(
-            "💡 *ЧЕМ МЫ ПОЛЕЗНЫ*\n\n"
-            "Знакомо?\n\n"
-            "━━━━━━━━━━━━━━━━━━━━━\n\n"
-            "😩 *Клиент написал ночью — а ты спишь*\n"
-            "Пока ты отдыхаешь, конкурент уже ответил\.\n"
-            "▸ Наш AI\-бот отвечает за *2 секунды*\n"
-            "  — днём и ночью, без выходных\n\n"
-            "😩 *Часы уходят на рутину*\n"
-            "Заявки, таблицы, напоминания, счета\.\.\.\n"
-            "▸ Автоматизация экономит *15\+ часов*\n"
-            "  *в неделю* — ты занимаешься бизнесом,\n"
-            "  а не копипастом\n\n"
-            "😩 *Реклама крутится — клиентов нет*\n"
-            "Бюджет сливается, а заявок ноль\.\n"
-            "▸ Настраиваем таргет так, чтобы\n"
-            "  каждый евро приносил *реальных клиентов*\n\n"
-            "━━━━━━━━━━━━━━━━━━━━━\n\n"
-            "📊 *Несколько цифр:*\n\n"
-            "▸ *70%* клиентов уходят, если не получили\n"
-            "  ответ в первые 5 минут\n"
-            "▸ Бизнесы с автоматизацией растут\n"
-            "  *в 2 раза быстрее* конкурентов\n"
-            "▸ AI\-бот заменяет *3\-5 менеджеров*\n"
-            "  и не просит зарплату\n\n"
-            "━━━━━━━━━━━━━━━━━━━━━\n\n"
-            "🚀 *Мы делаем так, чтобы твой бизнес*\n"
-            "*работал быстрее, умнее и без лишних рук\.*",
+            t(context, "useful"),
             parse_mode="MarkdownV2",
-            reply_markup=back_menu(),
+            reply_markup=back_menu(context),
         )
 
     # НЕИЗВЕСТНОЕ СООБЩЕНИЕ
     else:
         await update.message.reply_text(
-            "Используйте кнопки меню 👇",
-            reply_markup=main_menu(),
+            t(context, "use_buttons"),
+            reply_markup=main_menu(context),
         )
 
 
 # ─────────────────────────────────────────
 #  ИНЛАЙН-КНОПКИ УСЛУГ
 # ─────────────────────────────────────────
-def services_keyboard() -> InlineKeyboardMarkup:
+def services_keyboard(context) -> InlineKeyboardMarkup:
     """Клавиатура выбора услуг."""
     return InlineKeyboardMarkup([
-        [InlineKeyboardButton("🤖 AI-Бот", callback_data="service_aibot")],
-        [InlineKeyboardButton("⚙️ Автоматизация", callback_data="service_auto")],
-        [InlineKeyboardButton("🎯 Таргетированная реклама", callback_data="service_ads")],
+        [InlineKeyboardButton(t(context, "btn_aibot"), callback_data="service_aibot")],
+        [InlineKeyboardButton(t(context, "btn_auto"), callback_data="service_auto")],
+        [InlineKeyboardButton(t(context, "btn_ads"), callback_data="service_ads")],
     ])
 
 
-SERVICES = {
-    "service_aibot": (
-        "🤖 *AI\-БОТ*\n\n"
-        "Умный помощник, который работает за тебя 24/7\n\n"
-        "━━━━━━━━━━━━━━━━━━━━━\n"
-        "📦 *Что входит:*\n"
-        "━━━━━━━━━━━━━━━━━━━━━\n\n"
-        "▸ Бот на любой платформе на выбор:\n"
-        "  Telegram, Instagram, Facebook или сайт\n"
-        "▸ AI\-консультант, обученный под\n"
-        "  твой бизнес и бренд\n"
-        "▸ Автоматический сбор контактов\n"
-        "  в Google Sheets или другие программы\n"
-        "▸ Поддержка любого языка\n\n"
-        "━━━━━━━━━━━━━━━━━━━━━\n"
-        "✨ *Можно добавить:*\n"
-        "━━━━━━━━━━━━━━━━━━━━━\n\n"
-        "➕ Онлайн\-запись и бронирование\n"
-        "➕ Автоматические напоминания клиентам\n"
-        "➕ Генерация изображений прямо в боте\n"
-        "➕ Реакция на комментарии и сторис\n"
-        "➕ Интеграция с CRM\-системой\n"
-        "➕ Воронка продаж\n"
-        "➕ Поддержка и обновления после запуска"
-    ),
-    "service_auto": (
-        "⚙️ *АВТОМАТИЗАЦИЯ*\n\n"
-        "Убираем рутину — бизнес работает сам\n\n"
-        "━━━━━━━━━━━━━━━━━━━━━\n"
-        "📦 *Что входит:*\n"
-        "━━━━━━━━━━━━━━━━━━━━━\n\n"
-        "▸ Аудит твоих процессов: находим\n"
-        "  где теряется время и деньги\n"
-        "▸ Автоматизация одного ключевого процесса\n"
-        "  _Например: заявка → уведомление →_\n"
-        "  _таблица → ответ клиенту_\n\n"
-        "━━━━━━━━━━━━━━━━━━━━━\n"
-        "✨ *Можно добавить:*\n"
-        "━━━━━━━━━━━━━━━━━━━━━\n\n"
-        "➕ Автоматизация дополнительных процессов\n"
-        "➕ Интеграция между платформами и сервисами\n"
-        "➕ Авто\-отчёты и аналитика\n"
-        "➕ Автоматическое выставление счетов\n"
-        "➕ Интеграция с CRM\-системой\n"
-        "➕ Поддержка и обновления после запуска"
-    ),
-    "service_ads": (
-        "🎯 *ТАРГЕТИРОВАННАЯ РЕКЛАМА*\n\n"
-        "Реклама, которая приводит реальных клиентов\n"
-        "_Рекламный бюджет оплачивается отдельно_\n\n"
-        "━━━━━━━━━━━━━━━━━━━━━\n"
-        "📦 *Что входит:*\n"
-        "━━━━━━━━━━━━━━━━━━━━━\n\n"
-        "▸ Настройка рекламного кабинета с нуля\n"
-        "▸ Ведение рекламы на одной или более\n"
-        "  платформ: Meta, Google и TikTok\n"
-        "▸ Креативы — баннеры и тексты объявлений\n"
-        "▸ Настройка аудиторий и таргетинга\n"
-        "▸ Постоянная оптимизация кампаний\n\n"
-        "━━━━━━━━━━━━━━━━━━━━━\n"
-        "✨ *Можно добавить:*\n"
-        "━━━━━━━━━━━━━━━━━━━━━\n\n"
-        "➕ AI\-генерация рекламных материалов\n"
-        "➕ A/B тестирование объявлений\n"
-        "➕ Ретаргетинг — возвращаем тех,\n"
-        "  кто уже интересовался\n"
-        "➕ Landing page под рекламную кампанию\n"
-        "➕ Управление рекламным бюджетом"
-    ),
-}
+SERVICE_KEYS = {"service_aibot", "service_auto", "service_ads"}
 
 
-async def handle_service_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    """Обработка нажатий на инлайн-кнопки услуг."""
+async def handle_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """Обработка всех инлайн-кнопок."""
     query = update.callback_query
     await query.answer()
-
     data = query.data
 
-    if data in SERVICES:
+    if "lang" not in context.user_data:
+        context.user_data["lang"] = "ru"
+
+    # ВЫБОР ЯЗЫКА
+    if data.startswith("lang_"):
+        lang = data[5:]  # "lang_ru" -> "ru"
+        context.user_data["lang"] = lang
+        await query.message.delete()
+        await query.message.chat.send_message(
+            t(context, "welcome"),
+            reply_markup=main_menu(context),
+        )
+        return
+
+    # УСЛУГИ
+    if data in SERVICE_KEYS:
         back_kb = InlineKeyboardMarkup([
-            [InlineKeyboardButton("⬅️ Назад к услугам", callback_data="back_to_services")],
+            [InlineKeyboardButton(t(context, "btn_back_services"), callback_data="back_to_services")],
         ])
         await query.message.edit_text(
-            SERVICES[data],
+            t(context, data),
             parse_mode="MarkdownV2",
             reply_markup=back_kb,
         )
 
     elif data == "order_form":
         await query.message.edit_text(
-            "📝 *ФОРМА ЗАЯВКИ*\n\n"
-            "Скоро здесь будет ссылка на форму\.\n"
-            "Пока можете написать нам напрямую 👇",
+            t(context, "order_form"),
             parse_mode="MarkdownV2",
             reply_markup=InlineKeyboardMarkup([
-                [InlineKeyboardButton("📩 Связаться", url="https://t.me/Foxsiiiii")],
+                [InlineKeyboardButton(t(context, "btn_contact"), url="https://t.me/Foxsiiiii")],
             ]),
         )
 
     elif data == "back_to_services":
         await query.message.edit_text(
-            "📋 *НАШИ УСЛУГИ*\n\n"
-            "Мы помогаем бизнесу расти с помощью технологий\.\n"
-            "Каждое решение — под ваши задачи и цели\.\n\n"
-            "Выберите услугу, чтобы узнать подробнее 👇",
+            t(context, "services_intro"),
             parse_mode="MarkdownV2",
-            reply_markup=services_keyboard(),
+            reply_markup=services_keyboard(context),
         )
 
 
@@ -367,13 +293,11 @@ async def handle_demo_chat(update: Update, context: ContextTypes.DEFAULT_TYPE) -
     text = update.message.text
 
     # Выход из демо
-    if text == "❌ Завершить демо":
+    if text == t(context, "btn_end_demo"):
         context.user_data.pop("demo_history", None)
         await update.message.reply_text(
-            "👋 Демо завершено!\n\n"
-            "Понравилось? Такого AI-консультанта мы можем\n"
-            "сделать и для вашего бизнеса.",
-            reply_markup=main_menu(),
+            t(context, "demo_end"),
+            reply_markup=main_menu(context),
         )
         return ConversationHandler.END
 
@@ -402,9 +326,7 @@ async def handle_demo_chat(update: Update, context: ContextTypes.DEFAULT_TYPE) -
 
     except Exception as e:
         logger.error(f"OpenRouter ошибка: {e}")
-        await update.message.reply_text(
-            "⚠️ Не удалось получить ответ. Попробуйте ещё раз."
-        )
+        await update.message.reply_text(t(context, "demo_error"))
 
     return DEMO_CHAT
 
@@ -433,7 +355,7 @@ def main() -> None:
     # Обработчики
     app.add_handler(CommandHandler("start", start))
     app.add_handler(CommandHandler("menu", menu_command))
-    app.add_handler(CallbackQueryHandler(handle_service_callback))
+    app.add_handler(CallbackQueryHandler(handle_callback))
     app.add_handler(conv_handler)
 
     logger.info("✅ Бот готов!")
