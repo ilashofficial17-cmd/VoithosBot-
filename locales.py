@@ -294,7 +294,151 @@ TEXTS = {
         "demo_error": "⚠️ Couldn't get a response. Please try again.",
     },
     "de": {
-        # TODO: German translations
+        "welcome": (
+            "👋 Willkommen bei Aicore!\n\n"
+            "Wähle, was dich interessiert:"
+        ),
+        "choose_option": "Wähle eine Option:",
+        "btn_order": "🛍️ Dienste bestellen",
+        "btn_services": "📋 Unsere Dienste",
+        "btn_demo": "🤖 Demo",
+        "btn_useful": "💡 Warum wir",
+        "btn_back": "⬅️ Zurück zum Menü",
+        "btn_end_demo": "❌ Demo beenden",
+        "use_buttons": "Nutze die Menü-Buttons 👇",
+        "order_title": "🛍️ *DIENSTE BESTELLEN*\n\nWähle einen bequemen Weg 👇",
+        "btn_contact": "📩 Kontakt",
+        "btn_form": "📝 Formular ausfüllen",
+        "order_form": (
+            "📝 *ANTRAGSFORMULAR*\n\n"
+            "Ein Link zum Formular erscheint hier bald\\.\n"
+            "Bis dahin kannst du uns direkt schreiben 👇"
+        ),
+        "services_intro": (
+            "📋 *UNSERE DIENSTE*\n\n"
+            "Wir helfen Unternehmen, mit Technologie zu wachsen\\.\n"
+            "Jede Lösung ist auf deine Ziele zugeschnitten\\.\n\n"
+            "Wähle einen Dienst, um mehr zu erfahren 👇"
+        ),
+        "btn_aibot": "🤖 AI-Bot",
+        "btn_auto": "⚙️ Automatisierung",
+        "btn_ads": "🎯 Gezielte Werbung",
+        "btn_back_services": "⬅️ Zurück zu Diensten",
+        "service_aibot": (
+            "🤖 *AI\\-BOT*\n\n"
+            "Ein smarter Assistent, der 24/7 für dich arbeitet\n\n"
+            "━━━━━━━━━━━━━━━━━━━━━\n"
+            "📦 *Was enthalten ist:*\n"
+            "━━━━━━━━━━━━━━━━━━━━━\n\n"
+            "▸ Bot auf jeder Plattform deiner Wahl:\n"
+            "  Telegram, Instagram, Facebook oder Website\n"
+            "▸ AI\\-Berater, trainiert für\n"
+            "  dein Unternehmen und deine Marke\n"
+            "▸ Automatische Kontakterfassung\n"
+            "  über Google Sheets oder andere Tools\n"
+            "▸ Unterstützung jeder Sprache\n\n"
+            "━━━━━━━━━━━━━━━━━━━━━\n"
+            "✨ *Kann hinzugefügt werden:*\n"
+            "━━━━━━━━━━━━━━━━━━━━━\n\n"
+            "➕ Online\\-Buchung und Terminplanung\n"
+            "➕ Automatische Kundenerinnerungen\n"
+            "➕ Bildgenerierung direkt im Bot\n"
+            "➕ Reaktion auf Kommentare und Stories\n"
+            "➕ CRM\\-Integration\n"
+            "➕ Sales Funnel\n"
+            "➕ Support und Updates nach dem Start"
+        ),
+        "service_auto": (
+            "⚙️ *AUTOMATISIERUNG*\n\n"
+            "Wir entfernen die Routine — dein Business läuft von selbst\n\n"
+            "━━━━━━━━━━━━━━━━━━━━━\n"
+            "📦 *Was enthalten ist:*\n"
+            "━━━━━━━━━━━━━━━━━━━━━\n\n"
+            "▸ Audit deiner Prozesse: wir finden,\n"
+            "  wo Zeit und Geld verloren gehen\n"
+            "▸ Automatisierung eines Schlüsselprozesses\n"
+            "  _Zum Beispiel: Anfrage → Benachrichtigung →_\n"
+            "  _Tabelle → Kundenantwort_\n\n"
+            "━━━━━━━━━━━━━━━━━━━━━\n"
+            "✨ *Kann hinzugefügt werden:*\n"
+            "━━━━━━━━━━━━━━━━━━━━━\n\n"
+            "➕ Automatisierung weiterer Prozesse\n"
+            "➕ Integration zwischen Plattformen und Diensten\n"
+            "➕ Auto\\-Berichte und Analysen\n"
+            "➕ Automatische Rechnungsstellung\n"
+            "➕ CRM\\-Integration\n"
+            "➕ Support und Updates nach dem Start"
+        ),
+        "service_ads": (
+            "🎯 *GEZIELTE WERBUNG*\n\n"
+            "Werbung, die echte Kunden bringt\n"
+            "_Werbebudget wird separat bezahlt_\n\n"
+            "━━━━━━━━━━━━━━━━━━━━━\n"
+            "📦 *Was enthalten ist:*\n"
+            "━━━━━━━━━━━━━━━━━━━━━\n\n"
+            "▸ Einrichtung des Werbekontos von Grund auf\n"
+            "▸ Werbeschaltung auf einer oder mehreren\n"
+            "  Plattformen: Meta, Google und TikTok\n"
+            "▸ Kreatives — Banner und Anzeigentexte\n"
+            "▸ Zielgruppen\\- und Targeting\\-Einrichtung\n"
+            "▸ Kontinuierliche Kampagnenoptimierung\n\n"
+            "━━━━━━━━━━━━━━━━━━━━━\n"
+            "✨ *Kann hinzugefügt werden:*\n"
+            "━━━━━━━━━━━━━━━━━━━━━\n\n"
+            "➕ KI\\-generierte Werbematerialien\n"
+            "➕ A/B\\-Tests von Anzeigen\n"
+            "➕ Retargeting — wir holen die zurück,\n"
+            "  die bereits Interesse gezeigt haben\n"
+            "➕ Landing Page für die Werbekampagne\n"
+            "➕ Verwaltung des Werbebudgets"
+        ),
+        "useful": (
+            "💡 *WARUM WIR*\n\n"
+            "Kommt dir das bekannt vor?\n\n"
+            "━━━━━━━━━━━━━━━━━━━━━\n\n"
+            "😩 *Ein Kunde schrieb nachts — du schläfst*\n"
+            "Während du ruhst, hat dein Konkurrent schon geantwortet\\.\n"
+            "▸ Unser AI\\-Bot antwortet in *2 Sekunden*\n"
+            "  — Tag und Nacht, ohne freie Tage\n\n"
+            "😩 *Stunden gehen für Routine drauf*\n"
+            "Anfragen, Tabellen, Erinnerungen, Rechnungen\\.\\.\\.\n"
+            "▸ Automatisierung spart *15\\+ Stunden*\n"
+            "  *pro Woche* — du konzentrierst dich\n"
+            "  aufs Geschäft, nicht aufs Kopieren\n\n"
+            "😩 *Werbung läuft — keine Kunden*\n"
+            "Budget fließt ab, keine Anfragen\\.\n"
+            "▸ Wir richten Targeting so ein, dass\n"
+            "  jeder Euro *echte Kunden* bringt\n\n"
+            "━━━━━━━━━━━━━━━━━━━━━\n\n"
+            "📊 *Ein paar Zahlen:*\n\n"
+            "▸ *70%* der Kunden gehen, wenn sie\n"
+            "  innerhalb von 5 Minuten keine Antwort bekommen\n"
+            "▸ Unternehmen mit Automatisierung wachsen\n"
+            "  *2x schneller* als die Konkurrenz\n"
+            "▸ Ein AI\\-Bot ersetzt *3\\-5 Mitarbeiter*\n"
+            "  und verlangt kein Gehalt\n\n"
+            "━━━━━━━━━━━━━━━━━━━━━\n\n"
+            "🚀 *Wir sorgen dafür, dass dein Business*\n"
+            "*schneller, smarter und mit weniger Aufwand läuft\\.*"
+        ),
+        "demo_intro": (
+            "🤖 *AI\\-BERATER DEMO*\n\n"
+            "Du chattest jetzt mit dem AI\\-Assistenten von Aicore\\.\n"
+            "Er kennt alle unsere Dienste und hilft dir,\n"
+            "die richtige Lösung für dein Business zu finden\\.\n\n"
+            "Frag alles, zum Beispiel:\n"
+            "▸ _\"Ich brauche einen Bot für Instagram\"_\n"
+            "▸ _\"Wie automatisiere ich Anfragen?\"_\n"
+            "▸ _\"Welche Werbung passt zu mir?\"_\n\n"
+            "Schreib deine Frage 👇"
+        ),
+        "demo_unavailable": "⚠️ AI-Berater ist vorübergehend nicht verfügbar.",
+        "demo_end": (
+            "👋 Demo beendet!\n\n"
+            "Hat es dir gefallen? Genau so einen AI-Berater\n"
+            "können wir auch für dein Business bauen."
+        ),
+        "demo_error": "⚠️ Antwort konnte nicht abgerufen werden. Bitte versuche es erneut.",
     },
 }
 
