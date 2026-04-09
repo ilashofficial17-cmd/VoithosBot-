@@ -1,5 +1,6 @@
 import logging
 import os
+from openai import AsyncOpenAI
 from dotenv import load_dotenv
 from telegram import Update, ReplyKeyboardMarkup, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import (
@@ -15,10 +16,43 @@ from telegram.ext import (
 load_dotenv()
 
 TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
-CONTACT_LINK = os.getenv("CONTACT_LINK", "https://t.me/voithos")
+CONTACT_LINK = os.getenv("CONTACT_LINK", "https://t.me/Foxsiiiii")
+OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
 
 if not TOKEN:
     raise ValueError("TELEGRAM_BOT_TOKEN не установлен!")
+
+# OpenRouter клиент
+ai_client = AsyncOpenAI(
+    base_url="https://openrouter.ai/api/v1",
+    api_key=OPENROUTER_API_KEY or "",
+)
+
+AI_MODEL = os.getenv("AI_MODEL", "openai/gpt-4o-mini")
+
+SYSTEM_PROMPT = """Ты — AI-консультант компании Aicore (Applied AI for Growth). Твоя задача — помочь клиенту разобраться в услугах и подобрать подходящее решение.
+
+Говори дружелюбно, на «ты», коротко и по делу. Не выдумывай цены — если спрашивают точную стоимость, предложи связаться с менеджером (@Foxsiiiii).
+
+Вот услуги Aicore:
+
+1. AI-БОТ
+Умный помощник, который работает 24/7.
+Что входит: бот на любой платформе (Telegram, Instagram, Facebook, сайт), AI-консультант обученный под бизнес и бренд клиента, автоматический сбор контактов в Google Sheets или другие программы, поддержка любого языка.
+Можно добавить: онлайн-запись и бронирование, автоматические напоминания клиентам, генерация изображений в боте, реакция на комментарии и сторис, интеграция с CRM, воронка продаж, поддержка и обновления после запуска.
+
+2. АВТОМАТИЗАЦИЯ
+Убираем рутину — бизнес работает сам.
+Что входит: аудит процессов (находим где теряется время и деньги), автоматизация одного ключевого процесса (например: заявка → уведомление → таблица → ответ клиенту).
+Можно добавить: автоматизация дополнительных процессов, интеграция между платформами и сервисами, авто-отчёты и аналитика, автоматическое выставление счетов, интеграция с CRM, поддержка после запуска.
+
+3. ТАРГЕТИРОВАННАЯ РЕКЛАМА
+Реклама, которая приводит реальных клиентов. Рекламный бюджет оплачивается отдельно.
+Что входит: настройка рекламного кабинета с нуля, ведение рекламы на платформах Meta, Google и TikTok, креативы (баннеры и тексты), настройка аудиторий и таргетинга, постоянная оптимизация кампаний.
+Можно добавить: AI-генерация рекламных материалов, A/B тестирование, ретаргетинг, landing page под кампанию, управление рекламным бюджетом.
+
+Если клиент готов заказать — направь его к менеджеру: @Foxsiiiii
+Отвечай только на вопросы об услугах Aicore. Если спрашивают о чём-то постороннем — вежливо верни к теме."""
 
 logging.basicConfig(
     format="%(asctime)s | %(levelname)s | %(message)s",
@@ -27,8 +61,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 # Состояния для ConversationHandler
-WAITING_NAME = 1
-WAITING_CONTACT = 2
+DEMO_CHAT = 1
 
 
 # ─────────────────────────────────────────
@@ -57,7 +90,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     logger.info(f"👤 /start от {update.effective_user.first_name}")
 
     await update.message.reply_text(
-        "👋 Добро пожаловать в Voithos!\n\n"
+        "👋 Добро пожаловать в Aicore!\n\n"
         "Выберите что вас интересует:",
         reply_markup=main_menu(),
     )
@@ -124,11 +157,33 @@ async def handle_buttons(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
 
     # 🤖 ДЕМОНСТРАЦИЯ
     elif text == "🤖 Демонстрация":
-        await update.message.reply_text(
-            "🤖 ДЕМОНСТРАЦИЯ ИИ-КОНСУЛЬТАНТА\n\n"
-            "(Контент будет здесь)",
-            reply_markup=back_menu(),
+        if not OPENROUTER_API_KEY:
+            await update.message.reply_text(
+                "⚠️ AI-консультант временно недоступен.",
+                reply_markup=main_menu(),
+            )
+            return None
+
+        context.user_data["demo_history"] = []
+
+        demo_kb = ReplyKeyboardMarkup(
+            [["❌ Завершить демо"]],
+            resize_keyboard=True,
         )
+        await update.message.reply_text(
+            "🤖 *ДЕМО AI\-КОНСУЛЬТАНТА*\n\n"
+            "Сейчас вы общаетесь с AI\-помощником Aicore\.\n"
+            "Он знает всё о наших услугах и поможет\n"
+            "подобрать решение под ваш бизнес\.\n\n"
+            "Спросите что угодно, например:\n"
+            "▸ _«Мне нужен бот для Instagram»_\n"
+            "▸ _«Как автоматизировать заявки?»_\n"
+            "▸ _«Какая реклама мне подойдёт?»_\n\n"
+            "Напишите ваш вопрос 👇",
+            parse_mode="MarkdownV2",
+            reply_markup=demo_kb,
+        )
+        return DEMO_CHAT
 
     # 💡 ЧЕМ МЫ ПОЛЕЗНЫ
     elif text == "💡 Чем мы полезны":
@@ -296,42 +351,53 @@ async def handle_service_callback(update: Update, context: ContextTypes.DEFAULT_
 
 
 # ─────────────────────────────────────────
-#  ФОРМА ЗАКАЗА - СБОР ИМЕНИ
+#  ДЕМО AI-КОНСУЛЬТАНТ
 # ─────────────────────────────────────────
-async def get_name(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
-    """Сбор имени клиента."""
-    name = update.message.text
-    context.user_data["name"] = name
-    logger.info(f"📝 Имя: {name}")
+async def handle_demo_chat(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+    """Обработка сообщений в режиме демо AI-чата."""
+    text = update.message.text
 
-    await update.message.reply_text(
-        f"Спасибо, {name}!\n\n"
-        "Теперь поделитесь контактом:\n\n"
-        "• Телефон (например: +380501234567)\n"
-        "• Или Telegram: @username"
-    )
-    return WAITING_CONTACT
+    # Выход из демо
+    if text == "❌ Завершить демо":
+        context.user_data.pop("demo_history", None)
+        await update.message.reply_text(
+            "👋 Демо завершено!\n\n"
+            "Понравилось? Такого AI-консультанта мы можем\n"
+            "сделать и для вашего бизнеса.",
+            reply_markup=main_menu(),
+        )
+        return ConversationHandler.END
 
+    # Собираем историю
+    history = context.user_data.get("demo_history", [])
+    history.append({"role": "user", "content": text})
 
-# ─────────────────────────────────────────
-#  ФОРМА ЗАКАЗА - СБОР КОНТАКТА
-# ─────────────────────────────────────────
-async def get_contact(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
-    """Сбор контакта и сохранение заявки."""
-    contact = update.message.text
-    name = context.user_data.get("name", "Unknown")
+    # Отправляем "печатает..."
+    await update.message.chat.send_action("typing")
 
-    logger.info(f"📞 Заявка: {name} | {contact}")
+    try:
+        response = await ai_client.chat.completions.create(
+            model=AI_MODEL,
+            messages=[{"role": "system", "content": SYSTEM_PROMPT}] + history,
+            max_tokens=500,
+        )
+        reply = response.choices[0].message.content
+        history.append({"role": "assistant", "content": reply})
 
-    await update.message.reply_text(
-        f"✅ Спасибо!\n\n"
-        f"Ваша заявка принята:\n"
-        f"• Имя: {name}\n"
-        f"• Контакт: {contact}\n\n"
-        f"Наш консультант свяжется с вами в течение 24 часов.",
-        reply_markup=main_menu(),
-    )
-    return -1
+        # Ограничиваем историю последними 20 сообщениями
+        if len(history) > 20:
+            history = history[-20:]
+        context.user_data["demo_history"] = history
+
+        await update.message.reply_text(reply)
+
+    except Exception as e:
+        logger.error(f"OpenRouter ошибка: {e}")
+        await update.message.reply_text(
+            "⚠️ Не удалось получить ответ. Попробуйте ещё раз."
+        )
+
+    return DEMO_CHAT
 
 
 # ─────────────────────────────────────────
@@ -339,20 +405,19 @@ async def get_contact(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int
 # ─────────────────────────────────────────
 def main() -> None:
     logger.info("=" * 50)
-    logger.info("🚀 Voithos Bot стартует...")
+    logger.info("🚀 Aicore Bot стартует...")
 
     app = Application.builder().token(TOKEN).build()
 
-    # ConversationHandler для формы заказа
-    order_handler = ConversationHandler(
-        entry_points=[MessageHandler(filters.TEXT, handle_buttons)],
+    # ConversationHandler для меню, формы и демо
+    conv_handler = ConversationHandler(
+        entry_points=[MessageHandler(filters.TEXT & ~filters.COMMAND, handle_buttons)],
         states={
-            WAITING_NAME: [MessageHandler(filters.TEXT, get_name)],
-            WAITING_CONTACT: [MessageHandler(filters.TEXT, get_contact)],
+            DEMO_CHAT: [MessageHandler(filters.TEXT & ~filters.COMMAND, handle_demo_chat)],
         },
         fallbacks=[
+            CommandHandler("start", start),
             CommandHandler("menu", menu_command),
-            MessageHandler(filters.Regex("^⬅️ Назад в меню$"), menu_command),
         ],
     )
 
@@ -360,7 +425,7 @@ def main() -> None:
     app.add_handler(CommandHandler("start", start))
     app.add_handler(CommandHandler("menu", menu_command))
     app.add_handler(CallbackQueryHandler(handle_service_callback))
-    app.add_handler(order_handler)
+    app.add_handler(conv_handler)
 
     logger.info("✅ Бот готов!")
     logger.info("=" * 50)
