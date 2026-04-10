@@ -9,6 +9,7 @@ TEXTS = {
         "btn_services": "📋 Виды услуг",
         "btn_demo": "🤖 Демонстрация",
         "btn_useful": "💡 Чем мы полезны",
+        "btn_faq": "❓ Частые вопросы",
         "btn_back": "⬅️ Назад в меню",
         "btn_end_demo": "❌ Завершить демо",
         "use_buttons": "Используйте кнопки меню 👇",
@@ -152,6 +153,32 @@ TEXTS = {
             "как сделать такого же бота для твоего бизнеса."
         ),
         "btn_order_service": "🛍️ Заказать",
+        "faq": (
+            "❓ *ЧАСТЫЕ ВОПРОСЫ*\n\n"
+            "━━━━━━━━━━━━━━━━━━━━━\n\n"
+            "*Сколько это стоит?*\n"
+            "Зависит от задачи\\. Базовый бот — от €500, автоматизация — от €400, таргет — от €500/мес\\. Точную цену скажет менеджер после брифа\\.\n\n"
+            "*Сколько делаете по времени?*\n"
+            "AI\\-бот: 7\\-10 дней\\. Автоматизация: 5\\-7 дней\\. Таргет: запуск за 3\\-5 дней\\.\n\n"
+            "*Как работаем?*\n"
+            "1\\. Бриф и обсуждение задачи\n"
+            "2\\. Предложение и смета\n"
+            "3\\. Разработка\n"
+            "4\\. Запуск и тестирование\n"
+            "5\\. Поддержка после запуска\n\n"
+            "*А если не понравится?*\n"
+            "Показываем результат на каждом этапе\\. Вносим правки до полного одобрения\\.\n\n"
+            "*Как оплата?*\n"
+            "50% предоплата, 50% после запуска\\. По договору\\.\n\n"
+            "*Работаете с маленьким бизнесом?*\n"
+            "Да\\. У нас нет минимального размера клиента\\.\n\n"
+            "━━━━━━━━━━━━━━━━━━━━━\n\n"
+            "Не нашёл ответ? Напиши @Foxsiiiii"
+        ),
+        "cmd_start": "Запустить бота",
+        "cmd_menu": "Главное меню",
+        "cmd_lang": "Сменить язык",
+        "lang_prompt": "🌐 Выберите язык:",
     },
     "en": {
         "welcome": (
@@ -163,6 +190,7 @@ TEXTS = {
         "btn_services": "📋 Our services",
         "btn_demo": "🤖 Demo",
         "btn_useful": "💡 Why us",
+        "btn_faq": "❓ FAQ",
         "btn_back": "⬅️ Back to menu",
         "btn_end_demo": "❌ End demo",
         "use_buttons": "Use the menu buttons 👇",
@@ -306,6 +334,32 @@ TEXTS = {
             "how to build the same bot for your business."
         ),
         "btn_order_service": "🛍️ Order",
+        "faq": (
+            "❓ *FAQ*\n\n"
+            "━━━━━━━━━━━━━━━━━━━━━\n\n"
+            "*How much does it cost?*\n"
+            "Depends on the task\\. Basic bot — from €500, automation — from €400, ads — from €500/mo\\. Exact price after a brief with the manager\\.\n\n"
+            "*How long does it take?*\n"
+            "AI bot: 7\\-10 days\\. Automation: 5\\-7 days\\. Ads: launch in 3\\-5 days\\.\n\n"
+            "*How do we work?*\n"
+            "1\\. Brief and discussion\n"
+            "2\\. Proposal and quote\n"
+            "3\\. Development\n"
+            "4\\. Launch and testing\n"
+            "5\\. Post\\-launch support\n\n"
+            "*What if I don't like it?*\n"
+            "We show progress at every stage\\. Revisions until you're happy\\.\n\n"
+            "*How does payment work?*\n"
+            "50% upfront, 50% after launch\\. Under a contract\\.\n\n"
+            "*Do you work with small businesses?*\n"
+            "Yes\\. No minimum client size\\.\n\n"
+            "━━━━━━━━━━━━━━━━━━━━━\n\n"
+            "Couldn't find your answer? Message @Foxsiiiii"
+        ),
+        "cmd_start": "Start the bot",
+        "cmd_menu": "Main menu",
+        "cmd_lang": "Change language",
+        "lang_prompt": "🌐 Choose language:",
     },
     "de": {
         "welcome": (
@@ -317,6 +371,7 @@ TEXTS = {
         "btn_services": "📋 Unsere Dienste",
         "btn_demo": "🤖 Demo",
         "btn_useful": "💡 Warum wir",
+        "btn_faq": "❓ FAQ",
         "btn_back": "⬅️ Zurück zum Menü",
         "btn_end_demo": "❌ Demo beenden",
         "use_buttons": "Nutze die Menü-Buttons 👇",
@@ -460,6 +515,32 @@ TEXTS = {
             "besprechen, wie wir so einen Bot für dich bauen."
         ),
         "btn_order_service": "🛍️ Bestellen",
+        "faq": (
+            "❓ *HÄUFIGE FRAGEN*\n\n"
+            "━━━━━━━━━━━━━━━━━━━━━\n\n"
+            "*Was kostet es?*\n"
+            "Hängt von der Aufgabe ab\\. Basis\\-Bot — ab €500, Automatisierung — ab €400, Werbung — ab €500/Monat\\. Genauen Preis nennt der Manager nach dem Briefing\\.\n\n"
+            "*Wie lange dauert es?*\n"
+            "AI\\-Bot: 7\\-10 Tage\\. Automatisierung: 5\\-7 Tage\\. Werbung: Launch in 3\\-5 Tagen\\.\n\n"
+            "*Wie arbeiten wir?*\n"
+            "1\\. Briefing und Besprechung\n"
+            "2\\. Angebot und Kostenvoranschlag\n"
+            "3\\. Entwicklung\n"
+            "4\\. Launch und Testing\n"
+            "5\\. Support nach dem Launch\n\n"
+            "*Was, wenn es mir nicht gefällt?*\n"
+            "Wir zeigen Fortschritt in jeder Phase\\. Änderungen, bis du zufrieden bist\\.\n\n"
+            "*Wie läuft die Zahlung?*\n"
+            "50% im Voraus, 50% nach dem Launch\\. Per Vertrag\\.\n\n"
+            "*Arbeitet ihr mit kleinen Unternehmen?*\n"
+            "Ja\\. Keine Mindestgröße\\.\n\n"
+            "━━━━━━━━━━━━━━━━━━━━━\n\n"
+            "Keine Antwort gefunden? Schreib an @Foxsiiiii"
+        ),
+        "cmd_start": "Bot starten",
+        "cmd_menu": "Hauptmenü",
+        "cmd_lang": "Sprache ändern",
+        "lang_prompt": "🌐 Sprache wählen:",
     },
 }
 

@@ -1,5 +1,5 @@
 import logging
-from telegram import Update
+from telegram import Update, BotCommand, BotCommandScopeDefault
 from telegram.ext import (
     Application,
     CommandHandler,
@@ -13,6 +13,7 @@ from config import TOKEN
 from handlers import (
     start,
     menu_command,
+    lang_command,
     handle_buttons,
     handle_callback,
     handle_demo_chat,
@@ -26,11 +27,43 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
+async def set_bot_commands(app: Application) -> None:
+    """Регистрирует команды бота (появляются в меню / в Telegram)."""
+    # Дефолтные команды (английский)
+    await app.bot.set_my_commands(
+        [
+            BotCommand("start", "Start the bot"),
+            BotCommand("menu", "Main menu"),
+            BotCommand("lang", "Change language"),
+        ],
+        scope=BotCommandScopeDefault(),
+    )
+    # Русская локаль
+    await app.bot.set_my_commands(
+        [
+            BotCommand("start", "Запустить бота"),
+            BotCommand("menu", "Главное меню"),
+            BotCommand("lang", "Сменить язык"),
+        ],
+        language_code="ru",
+    )
+    # Немецкая локаль
+    await app.bot.set_my_commands(
+        [
+            BotCommand("start", "Bot starten"),
+            BotCommand("menu", "Hauptmenü"),
+            BotCommand("lang", "Sprache ändern"),
+        ],
+        language_code="de",
+    )
+    logger.info("✅ Команды бота зарегистрированы")
+
+
 def main() -> None:
     logger.info("=" * 50)
     logger.info("🚀 Aicore Bot стартует...")
 
-    app = Application.builder().token(TOKEN).build()
+    app = Application.builder().token(TOKEN).post_init(set_bot_commands).build()
 
     conv_handler = ConversationHandler(
         entry_points=[MessageHandler(filters.TEXT & ~filters.COMMAND, handle_buttons)],
@@ -40,11 +73,13 @@ def main() -> None:
         fallbacks=[
             CommandHandler("start", start),
             CommandHandler("menu", menu_command),
+            CommandHandler("lang", lang_command),
         ],
     )
 
     app.add_handler(CommandHandler("start", start))
     app.add_handler(CommandHandler("menu", menu_command))
+    app.add_handler(CommandHandler("lang", lang_command))
     app.add_handler(CallbackQueryHandler(handle_callback))
     app.add_handler(conv_handler)
 
